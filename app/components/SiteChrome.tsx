@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { TOKEN } from "../lib/launch";
 
 /** The mark: one worm, splitting in two. */
 export function Mark() {
@@ -18,7 +19,7 @@ export function SiteNav({ home = false }: { home?: boolean }) {
     <div className="navLinks">
       <a href={h("jar")}>The jar</a>
       <a href={h("replay")}>Replay</a>
-      <a href={h("token")}>$WORM</a>
+      <a href={h("token")}>{TOKEN.symbol}</a>
       <Link href="/forecast">Forecast</Link>
       <Link href="/essay">Why WORM</Link>
       <Link href="/faq">FAQ</Link>
@@ -47,7 +48,7 @@ export function SiteFooter() {
         <Link href="/privacy">Privacy</Link>
       </div>
     </div>
-    <p>Simulation only. No real money moves and nothing leaves the dish. Wallets only sign sealed moves; the chain only supplies randomness and daily anchors. No token exists yet.</p>
+    <p>Simulation only. No real money moves and nothing leaves the dish. Wallets only sign sealed moves; the chain only supplies randomness and daily anchors. {TOKEN.live ? `${TOKEN.symbol} is not a share of anything; the only contract address is the one in the token section.` : "No token exists yet."}</p>
     <p className="fine">The premise is drawn from published research on self-replicating models. This project is independent, is not affiliated with its authors, and implements none of the capability it describes. The reading, with its numbers and caveats, is filed in <code>docs/ARTICLE.md</code>. MIT licence.</p>
   </footer>;
 }

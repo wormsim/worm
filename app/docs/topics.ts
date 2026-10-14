@@ -33,6 +33,8 @@ export const TOPICS: Topic[] = [
     blurb: "The rules for changing any of this without quietly breaking the one thing it promises." },
   { slug: "glossary", group: "Reference", title: "Glossary", file: "docs/glossary.md",
     blurb: "Every word this project uses, defined once: tick, lid, seal, draw, R, anchor." },
+  { slug: "roadmap", group: "Reference", title: "Roadmap", file: "docs/ROADMAP.md",
+    blurb: "What is designed but not built, in order, with the rules every item has to keep." },
   { slug: "deploy", group: "Reference", title: "Deploy and ops", file: "deploy/README.md",
     blurb: "How this runs on a server: releases, the timers, the UTC cron, the backups, and what is not covered." },
   { slug: "article", group: "Records", title: "The source reading", file: "docs/ARTICLE.md",

@@ -71,8 +71,11 @@ Every day, in UTC: moves open 00:00–18:00, the block is drawn at 18:00, reveal
 
 ## Token
 
-**Is there a $WORM token?**
-Not yet. **No token exists, nothing is on sale, and no airdrop is promised.** Any $WORM you see today isn't ours. Launch facts will appear on the homepage first.
+**Is there a $AIWORM token?**
+Not yet. **No token exists, nothing is on sale, and no airdrop is promised.** Any $AIWORM you see today isn't ours. Launch facts will appear on the homepage first.
+
+**Why $AIWORM and not $WORM?**
+Several unrelated tokens already trade as $WORM. A ticker can't prove anything anyway: the contract address published on this site is the only thing that identifies ours.
 
 **If there is one, can I bet on a side or earn from playing?**
 No. No bets on a side, no payout for picking the winner, no dividends, no yield, no play-to-earn. War-chest tokens are burned.

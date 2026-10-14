@@ -298,8 +298,11 @@ npm run replay -- --seed ${GOLDEN_SEED} --ticks ${GOLDEN_TICKS} --check
 
     <section className="section tokenSection" id="token">
       <div className="sectionHead">
-        <div><label>{TOKEN.symbol}</label><h2>Not live.<br /><em>Any {TOKEN.symbol} today is fake.</em></h2></div>
-        <p>{TOKEN.statusNote} The chain, the venue and the contract address will be published in this section first, and nowhere else.</p>
+        {TOKEN.live
+          ? <><div><label>{TOKEN.symbol}</label><h2>Live.<br /><em>One contract. This one.</em></h2></div>
+            <p>{TOKEN.liveNote}</p></>
+          : <><div><label>{TOKEN.symbol}</label><h2>Not live.<br /><em>Any {TOKEN.symbol} today is fake.</em></h2></div>
+            <p>{TOKEN.statusNote} The chain, the venue and the contract address will be published in this section first, and nowhere else.</p></>}
       </div>
       <ol className="road">
         <li className="done"><span className="mono">NOW</span><b>The jar, verifiable</b><p>Deterministic dish, sealed ticks, a page per worm, daily anchor tooling.</p></li>

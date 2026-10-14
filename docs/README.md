@@ -31,6 +31,7 @@ Both live on `/play`, and both replay: a run's score is the replay's score, not 
 | Doc | Read it for |
 | --- | --- |
 | [`glossary.md`](glossary.md) | Every word the project uses, defined once: tick, lid, seal, draw, R, anchor |
+| [`ROADMAP.md`](ROADMAP.md) | What is designed but not built, in order, and the rules every item has to keep |
 | [`../deploy/README.md`](../deploy/README.md) | How it runs on a server: releases, timers, UTC cron, backups, and what is not covered |
 
 ## Written, tested, and deliberately unused

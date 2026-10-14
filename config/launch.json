@@ -2,17 +2,18 @@
   "_comment": "Single source of truth for launch facts. Pages and docs read from here instead of hard-coding a chain, a venue, an address or a status. Values still written as {{PLACEHOLDER}} are not decided: the site renders them as 'to be announced' (app/lib/launch.ts) and never prints the placeholder. When a value is final, replace it here, rebuild, and the whole site follows.",
   "site": "https://wormsim.xyz",
   "token": {
-    "symbol": "$WORM",
-    "name": "WORM",
+    "symbol": "$AIWORM",
+    "name": "AI Worm",
     "status": "not-live",
-    "statusNote": "No token exists. Nothing is on sale, and no airdrop is promised. Any $WORM you see today is not ours.",
+    "statusNote": "No token exists. Nothing is on sale, and no airdrop is promised. Any $AIWORM you see today is not ours, and older tokens called $WORM have nothing to do with this project.",
     "chain": "Robinhood Chain (chain ID 4663)",
     "venue": "{{TOKEN_VENUE}}",
     "contract": "{{TOKEN_CA}}",
     "supply": "{{TOKEN_SUPPLY}}",
     "devWallet": "{{DEV_WALLET}}",
     "anchorWallet": "{{ANCHOR_WALLET}}",
-    "teamAllocation": "{{TEAM_ALLOCATION}}"
+    "teamAllocation": "{{TEAM_ALLOCATION}}",
+    "liveNote": "The contract address in this section is the only one that is ours. Older tokens called $WORM have nothing to do with this project."
   },
   "x402": {
     "open": false,

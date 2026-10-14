@@ -6,7 +6,7 @@
 
 **No money moves here.** The site takes no payments and holds no funds. In the live season your wallet signs plain-text messages that commit to a move; those signatures transfer nothing and approve nothing. If anything on a page claiming to be WORM asks you to send funds or approve a token, it isn't us.
 
-**No token today.** No $WORM token exists. If one is launched, its facts will be published on this site first, and the principles on the homepage apply: no bets on a side, no dividends, no yield, no play-to-earn, and war-chest tokens are burned. Nothing on this site is an offer to sell anything or a promise of value.
+**No token today.** No $AIWORM token exists. If one is launched, its facts will be published on this site first, and the principles on the homepage apply: no bets on a side, no dividends, no yield, no play-to-earn, and war-chest tokens are burned. Nothing on this site is an offer to sell anything or a promise of value.
 
 **Fair play.** Don't try to break the live server, flood it, or sign moves for wallets you don't control. The rules are enforced by the commit-and-reveal protocol and by everyone's browser replaying the season. We may reset a season if the server was attacked or a bug changed results, and we'll say so in the audit log.
 
