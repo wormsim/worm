@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import { RULES, simulate, WORLD_VERSION } from "../sim/engine";
@@ -22,6 +22,15 @@ function statusLines(title: string): string[] {
   const section = text.split(`## ${title}`)[1]?.split("\n## ")[0] ?? "";
   return section.split("\n").filter((l) => l.trim().startsWith("- ")).map((l) => l.replace(/^-\s*/, "").replace(/\*\*/g, ""));
 }
+
+/** How many tests the tree declares. Counted from tests/ for the same reason as above: a number
+    restated by hand drifts, and this page is not allowed to drift. */
+function testCount(): number {
+  const dir = path.join(process.cwd(), "tests");
+  return readdirSync(dir).filter((f) => f.endsWith(".test.ts"))
+    .reduce((n, f) => n + (readFileSync(path.join(dir, f), "utf8").match(/^\s*(?:await )?test\(/gm) ?? []).length, 0);
+}
+const TESTS = testCount();
 
 const STEPS = [
   { g: "rent", k: "01 · RENT", f: `${RULES.rent} × (1 + ${RULES.rentCreep}·t)`, h: "Every agent pays for compute.", p: "Charged first, every tick, to every living agent. It creeps up as the run goes on, so standing still is not an option." },
@@ -193,7 +202,7 @@ export default function Home() {
       <div className="proof">
         <div><b className="mono">{WORLD_VERSION.toUpperCase()}</b><span>one rule set, one version; a rule change bumps it</span></div>
         <div><b className="mono">SHA-256</b><span>about sixty readable lines, checked against node:crypto in CI</span></div>
-        <div><b className="mono">13 TESTS</b><span>determinism, invariants, goldens and the boundary, on every push</span></div>
+        <div><b className="mono">{TESTS} TESTS</b><span>determinism, invariants, goldens and the boundary, on every push</span></div>
       </div>
       <pre className="cli">{`npm ci
 npm run replay -- --seed ${GOLDEN_SEED} --ticks ${GOLDEN_TICKS} --check
