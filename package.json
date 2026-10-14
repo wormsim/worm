@@ -1,0 +1,35 @@
+{
+  "name": "worm-sim",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WORM: a dish of agents that pay rent, split in two and die, and a Red vs Blue game on top. Deterministic, replayable, no real money.",
+  "license": "MIT",
+  "scripts": {
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test && npm run build",
+    "replay": "tsx scripts/replay.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "anchor": "tsx scripts/anchor.ts",
+    "verify:anchors": "tsx scripts/verify-anchor.ts",
+    "post:daily": "tsx scripts/post-daily.ts",
+    "verify:run": "tsx scripts/verify-run.ts",
+    "anchor:board": "tsx scripts/anchor-board.ts"
+  },
+  "dependencies": {
+    "next": "15.5.27",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tlock-js": "0.9.0",
+    "viem": "^2.57.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "tsx": "4.23.13",
+    "typescript": "5.9.2"
+  }
+}

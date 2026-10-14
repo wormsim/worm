@@ -1,0 +1,201 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Archivo;src:url(archivo.woff2) format('woff2');font-weight:100 900;font-stretch:62% 125%}
+@font-face{font-family:Plex;src:url(plex500.woff2) format('woff2');font-weight:500}
+html,body{margin:0;background:#000;overflow:hidden}
+canvas{display:block}
+</style></head><body><canvas id="c" width="1920" height="1080"></canvas>
+<script>
+const DATA = window.__DATA;
+const W = 1920, H = 1080, FPS = 30;
+const c = document.getElementById('c'), x = c.getContext('2d');
+const DAPI = [92,225,255], SP = [255,95,183], DEEP = [150,140,255], AMB = [255,181,71], INK = [238,241,248], GOLD = [255,210,120];
+const rgba = (k, a) => `rgba(${k[0]|0},${k[1]|0},${k[2]|0},${Math.max(0, Math.min(1, a))})`;
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const ease = (v) => 1 - Math.pow(1 - clamp(v), 3);
+const easeIO = (v) => { v = clamp(v); return v < .5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2; };
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+let seedv = 11; const rnd = () => (seedv = (seedv * 16807) % 2147483647) / 2147483647;
+const hash = (n) => { let h = Math.imul(n ^ 0x9e3779b9, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16; return (h >>> 0) / 4294967296; };
+
+function glow(px, py, r, k, a) { if (a <= 0) return; const g = x.createRadialGradient(px, py, 0, px, py, r); g.addColorStop(0, rgba(k, a)); g.addColorStop(1, rgba(k, 0)); x.fillStyle = g; x.beginPath(); x.arc(px, py, r, 0, 7); x.fill(); }
+function text(s, px, py, { size = 40, weight = 800, font = 'Archivo', color = INK, alpha = 1, align = 'left', spacing = 0, stretch = 'normal' } = {}) {
+  if (alpha <= 0) return; x.save(); x.globalAlpha = clamp(alpha); x.fillStyle = Array.isArray(color) ? rgba(color, 1) : color;
+  x.font = `${weight} ${size}px ${font}`; x.letterSpacing = `${spacing}px`; x.fontStretch = stretch; x.textAlign = align; x.textBaseline = 'alphabetic'; x.fillText(s, px, py); x.restore();
+}
+/* a worm drawn from a list of points, head first */
+function wormPts(pts, k, w, a = 1, pinch = 0) {
+  if (a <= 0 || pts.length < 2) return; const n = pts.length;
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  x.globalCompositeOperation = 'lighter'; x.strokeStyle = rgba(k, .10 * a); x.lineWidth = w * 3.6; x.beginPath(); pts.forEach(([p, q], i) => i ? x.lineTo(p, q) : x.moveTo(p, q)); x.stroke();
+  x.globalCompositeOperation = 'source-over';
+  const mid = (n - 1) / 2;
+  for (let i = 0; i < n - 1; i++) { const u = i / (n - 1), taper = u < .1 ? .75 + u * 2.5 : 1 - Math.max(0, u - .55) * 1.4;
+    const pz = 1 - pinch * Math.exp(-((i - mid) ** 2) / 3);
+    x.strokeStyle = rgba(mix([7, 11, 20], k, .42), a); x.lineWidth = Math.max(1, w * 2 * taper * pz); x.beginPath(); x.moveTo(...pts[i]); x.lineTo(...pts[i + 1]); x.stroke(); }
+  x.strokeStyle = rgba(k, .35 * a); x.lineWidth = Math.max(1, w * .14);
+  for (let i = 2; i < n - 2; i += 2) { const [p1, q1] = pts[i - 1], [p2, q2] = pts[i + 1], L = Math.hypot(p2 - p1, q2 - q1) || 1, nx = -(q2 - q1) / L, ny = (p2 - p1) / L, hw = w * .85; x.beginPath(); x.moveTo(pts[i][0] + nx * hw, pts[i][1] + ny * hw); x.lineTo(pts[i][0] - nx * hw, pts[i][1] - ny * hw); x.stroke(); }
+  x.globalCompositeOperation = 'lighter';
+  x.strokeStyle = rgba(mix(k, INK, .4), .8 * a); x.lineWidth = Math.max(1, w * .55); x.beginPath(); pts.slice(1, Math.ceil(n * .7)).forEach(([p, q], i) => i ? x.lineTo(p, q) : x.moveTo(p, q)); x.stroke();
+  glow(pts[0][0], pts[0][1], w * 3.2, k, .55 * a);
+  x.globalCompositeOperation = 'source-over';
+  x.fillStyle = rgba([232, 251, 255], a); x.beginPath(); x.arc(pts[0][0], pts[0][1], w * 1.05, 0, 7); x.fill();
+}
+/* a crawling worm: its body follows the path its head took a moment ago */
+function trail(fn, t, n = 18, dt = .045) { const pts = []; for (let i = 0; i < n; i++) pts.push(fn(t - i * dt)); return pts; }
+function orbit(k, cx, cy, R) {
+  const a0 = hash(k) * 6.28, r0 = (.15 + .8 * Math.sqrt(hash(k + 99))) * R, sp = (.18 + hash(k + 7) * .25) * (hash(k + 3) > .5 ? 1 : -1);
+  return (t) => { const a = a0 + t * sp, r = r0 + Math.sin(t * .9 + k) * R * .06; return [cx + Math.cos(a) * r + Math.sin(t * 3.1 + k) * 7, cy + Math.sin(a) * r + Math.cos(t * 2.7 + k * 2) * 7]; };
+}
+function dish(cx, cy, R, progress = 1, a = 1) {
+  if (a <= 0) return; x.save(); x.globalAlpha = a;
+  const g = x.createRadialGradient(cx, cy - R * .2, R * .05, cx, cy, R * 1.05); g.addColorStop(0, '#0e1a2e'); g.addColorStop(.7, '#070b14'); g.addColorStop(1, '#04060a');
+  x.fillStyle = g; x.beginPath(); x.arc(cx, cy, R * ease(progress), 0, 7); x.fill();
+  x.save(); x.beginPath(); x.arc(cx, cy, R * ease(progress), 0, 7); x.clip(); x.strokeStyle = '#111b2c'; x.lineWidth = 1; x.beginPath();
+  for (let i = (cx - R) % 34; i < W; i += 34) { x.moveTo(i, 0); x.lineTo(i, H); } for (let j = (cy - R) % 34; j < H; j += 34) { x.moveTo(0, j); x.lineTo(W, j); } x.stroke(); x.restore();
+  x.strokeStyle = '#2c3b58'; x.lineWidth = 2; x.beginPath(); x.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * ease(progress)); x.stroke();
+  const ticks = Math.floor(240 * ease(progress));
+  for (let i = 0; i < ticks; i++) { const an = i / 240 * Math.PI * 2 - Math.PI / 2, L = i % 20 === 0 ? 18 : i % 5 === 0 ? 11 : 7; x.strokeStyle = i % 20 === 0 ? '#4a5c80' : '#1d2840'; x.lineWidth = 1.2; x.beginPath(); x.moveTo(cx + Math.cos(an) * (R + 8), cy + Math.sin(an) * (R + 8)); x.lineTo(cx + Math.cos(an) * (R + 8 + L), cy + Math.sin(an) * (R + 8 + L)); x.stroke(); }
+  x.restore();
+}
+function lid(cx, cy, R, frac, k) { x.strokeStyle = '#141c2c'; x.lineWidth = 5; x.lineCap = 'round'; x.beginPath(); x.arc(cx, cy, R + 34, 0, 7); x.stroke(); x.strokeStyle = rgba(k, .95); x.beginPath(); x.arc(cx, cy, R + 34, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * clamp(frac)); x.stroke(); }
+function grain(f) { const d = x.getImageData(0, 0, W, H); let s = (f * 9301 + 49297) % 233280; for (let i = 0; i < d.data.length; i += 16) { s = (s * 9301 + 49297) % 233280; const n = (s / 233280 - .5) * 14; for (let j = i; j < i + 16 && j < d.data.length; j += 4) { d.data[j] += n; d.data[j + 1] += n; d.data[j + 2] += n; } } x.putImageData(d, 0, 0); }
+function vignette() { const g = x.createRadialGradient(W / 2, H / 2, H * .35, W / 2, H / 2, H * .95); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+function typed(s, t0, t, cps = 55) { const n = Math.floor(clamp((t - t0) * cps, 0, s.length)); return s.slice(0, n) + (n < s.length && Math.floor(t * 6) % 2 ? '▌' : ''); }
+function counter(label, value, px, py, k = INK, a = 1, size = 64) { text(label, px, py, { size: 18, weight: 500, font: 'Plex', color: [138, 146, 168], alpha: a, spacing: 3 }); text(value, px, py + size + 8, { size, weight: 800, color: k, alpha: a, spacing: -2 }); }
+function eyebrow(s, px, py, a, k = DAPI, align = 'left') { text(s, px, py, { size: 20, weight: 500, font: 'Plex', color: k, alpha: a, spacing: 4, align }); }
+
+/* ── the film ─────────────────────────────────────────────────────────── */
+function draw(f) {
+  const t = f / FPS;
+  x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+  x.fillStyle = '#05060a'; x.fillRect(0, 0, W, H);
+  glow(W * .72, H * .5, 900, DAPI, .05); glow(W * .15, H, 700, SP, .035);
+
+  // 1 · the news (0 – 3.4)
+  if (t < 3.6) {
+    const a = 1 - seg(t, 3.1, 3.5);
+    const lone = (tt) => [-200 + tt * 520, H * .62 + Math.sin(tt * 2.4) * 40];
+    wormPts(trail(lone, t, 26, .05), DAPI, 15, a * seg(t, .2, .9));
+    eyebrow(typed('OCTOBER 2026 · RESEARCHERS SHOW SMALL AI MODELS COPYING THEMSELVES, MACHINE TO MACHINE', .25, t, 70), 160, 300, a);
+    const s1 = ease(seg(t, 1.3, 2.0));
+    x.save(); x.filter = `blur(${(1 - s1) * 12}px)`; text('They built an AI worm.', 152, 470 + (1 - s1) * 40, { size: 150, color: INK, alpha: s1 * a, spacing: -6 }); x.restore();
+  }
+  // 2 · the turn (3.2 – 6.2)
+  if (t >= 3.2 && t < 6.4) {
+    const a = seg(t, 3.2, 3.6) * (1 - seg(t, 6.0, 6.4));
+    dish(1460, 560, 360, seg(t, 3.3, 4.6), a);
+    for (let k = 0; k < 7; k++) wormPts(trail(orbit(k, 1460, 560, 300), t - 3.2 + k * .7, 16, .05), k === 3 ? AMB : DAPI, 9, a * seg(t, 4.0 + k * .12, 4.6 + k * .12));
+    text('They built an AI worm.', 140, 430, { size: 90, color: INK, alpha: a * .9, spacing: -4 });
+    const s2 = ease(seg(t, 3.6, 4.3));
+    x.save(); x.filter = `blur(${(1 - s2) * 10}px)`; text('We made it pay rent.', 140, 545, { size: 90, color: DAPI, alpha: s2 * a, spacing: -4 }); x.restore();
+    eyebrow('A DISH OF WORMS · EACH ONE AN AGENT WITH A BALANCE', 146, 650, a * seg(t, 4.6, 5.2), [138, 146, 168]);
+  }
+  // 3 · the rules, close up (6.2 – 11.8)
+  if (t >= 6.2 && t < 12) {
+    const a = seg(t, 6.2, 6.6) * (1 - seg(t, 11.6, 12));
+    const cx = 700, cy = 540, R = 430;
+    dish(cx, cy, R, 1, a);
+    // rent: a worm crawling, its gut dimming as rent is paid
+    const rentA = a * (1 - seg(t, 8.4, 8.8));
+    if (rentA > 0) {
+      const p = trail((tt) => [cx - 220 + tt * 60, cy - 60 + Math.sin(tt * 2) * 50], t - 6.2, 22, .06);
+      const energy = 1 - seg(t, 6.6, 8.4) * .7;
+      wormPts(p, mix(AMB, DAPI, energy), 18, rentA);
+      eyebrow('01 · RENT', 1260, 380, rentA); text('Rent is due', 1254, 480, { size: 92, alpha: rentA, spacing: -3 }); text('every tick.', 1254, 575, { size: 92, alpha: rentA, color: DAPI, spacing: -3 });
+      counter('RENT / TICK', (0.45 + seg(t, 6.6, 8.4) * .162).toFixed(3), 1260, 660, AMB, rentA);
+      counter('BALANCE', (6.2 - seg(t, 6.6, 8.4) * 4.9).toFixed(2), 1560, 660, mix(AMB, INK, energy), rentA);
+    }
+    // split: one worm pinches and becomes two
+    const spA = a * seg(t, 8.4, 8.8) * (1 - seg(t, 10.2, 10.5));
+    if (spA > 0) {
+      const q = seg(t, 8.6, 10.0), cut = q > .55, sep = cut ? easeIO((q - .55) / .45) * 260 : 0;
+      const base = (tt) => [cx - 200 + tt * 20, cy + Math.sin(tt * 3) * 10];
+      const full = trail(base, t, 30, .05).map(([px, py], i) => [px + 200 - i * 0 , py]);
+      const body = []; for (let i = 0; i < 30; i++) body.push([cx + 230 - i * 16, cy + Math.sin(i * .5 + t * 3) * 16]);
+      if (!cut) { wormPts(body, mix(DAPI, SP, Math.sin(q / .55 * Math.PI / 2) * .8), 20, spA, ease(q / .55) * .85); glow(body[15][0], body[15][1], 90 * (.4 + q), SP, .6 * spA); }
+      else { const front = body.slice(0, 15).map(([px, py]) => [px + sep / 2, py - sep * .15]), back = body.slice(15).reverse().map(([px, py]) => [px - sep / 2, py + sep * .15]);
+        wormPts(front, mix(DAPI, SP, 1 - q), 20, spA); wormPts(back, mix(DAPI, SP, 1 - q), 20, spA);
+        for (let k = 0; k < 10; k++) { const an = k / 10 * 6.28, d = 160 * easeIO((q - .55) / .45); glow(body[15][0] + Math.cos(an) * d, body[15][1] + Math.sin(an) * d, 10, SP, .8 * (1 - (q - .55) / .45) * spA); } }
+      eyebrow('02 · SPLIT', 1260, 380, spA, SP); text('Rich enough?', 1254, 480, { size: 92, alpha: spA, spacing: -3 }); text('It splits in two.', 1254, 575, { size: 92, alpha: spA, color: SP, spacing: -3 });
+      text('The child takes half. One generation deeper.', 1260, 650, { size: 30, weight: 500, color: [179, 186, 203], alpha: spA });
+    }
+    // death: a worm curls, then breaks into specks
+    const dA = a * seg(t, 10.2, 10.5);
+    if (dA > 0) {
+      const q = seg(t, 10.4, 11.5); const n = 24, pts = [];
+      for (let i = 0; i < n; i++) { const u = i / n, ang = u * 5 * ease(q / .6), r = 260 * (1 - u) * (1 - .55 * ease(q / .6)) + 40; pts.push([cx + Math.cos(ang + 2) * r * .9, cy + Math.sin(ang + 2) * r * .5]); }
+      if (q < .6) wormPts(pts, AMB, 18, dA * (1 - q * .5));
+      else for (let i = 0; i < n; i += 2) { const k2 = (q - .6) / .4, an = hash(i) * 6.28, d = 140 * ease(k2); glow(pts[i][0] + Math.cos(an) * d, pts[i][1] + Math.sin(an) * d + k2 * 40, 14, AMB, .9 * (1 - k2) * dA); }
+      eyebrow('03 · DIE', 1260, 380, dA, AMB); text("Can't pay?", 1254, 480, { size: 92, alpha: dA, spacing: -3 }); text('It dies.', 1254, 575, { size: 92, alpha: dA, color: AMB, spacing: -3 });
+      text('Every death stays on the record.', 1260, 650, { size: 30, weight: 500, color: [179, 186, 203], alpha: dA });
+    }
+  }
+  // 4 · the swarm (11.8 – 16.8)
+  if (t >= 11.8 && t < 17) {
+    const a = seg(t, 11.8, 12.2) * (1 - seg(t, 16.6, 17));
+    const cx = 760, cy = 540, R = 440, q = seg(t, 12.0, 15.6), tick = Math.min(DATA.alive.length - 1, Math.floor(q * 110));
+    const alive = DATA.alive[tick], gen = DATA.gen[tick];
+    dish(cx, cy, R, 1, a);
+    for (let k = 0; k < alive; k++) wormPts(trail(orbit(k + 20, cx, cy, R * .86), t * 1.3 + k, 15, .05), hash(k + 5) < .12 ? AMB : hash(k + 9) < .25 ? DEEP : DAPI, 7.5, a * seg(t, 12 + k * .02, 12.3 + k * .02));
+    lid(cx, cy, R, alive / 42, alive >= 42 ? SP : DAPI);
+    if (alive >= 42) glow(cx, cy - R - 34, 80, SP, .5 * a);
+    eyebrow('TIME-LAPSE · THE REAL ENGINE', 1340, 330, a);
+    counter('ALIVE', `${alive}`, 1340, 380, alive >= 42 ? SP : INK, a, 120);
+    counter('GENERATION', `${gen}`, 1640, 380, INK, a, 120);
+    text('The dish has a lid.', 1340, 680, { size: 64, alpha: a * seg(t, 15.0, 15.5), color: SP, spacing: -2 });
+    text('Forty-two seats. Nothing gets out.', 1344, 740, { size: 30, weight: 500, alpha: a * seg(t, 15.3, 15.8), color: [179, 186, 203] });
+  }
+  // 5 · red vs blue (16.8 – 21.8)
+  if (t >= 16.8 && t < 22) {
+    const a = seg(t, 16.8, 17.2) * (1 - seg(t, 21.6, 22));
+    const cx = 960, cy = 600, R = 360;
+    dish(cx, cy, R, 1, a);
+    // quarantine box
+    const qa = a * seg(t, 18.6, 19.0);
+    if (qa > 0) { x.save(); x.globalAlpha = qa; x.fillStyle = rgba(AMB, .08); x.fillRect(cx + 40, cy - 40, 200, 200); x.strokeStyle = rgba(AMB, .9); x.setLineDash([12, 9]); x.lineWidth = 3; x.strokeRect(cx + 40, cy - 40, 200, 200); x.setLineDash([]); x.restore(); }
+    // honeypot and the worm that walks into it
+    const hp = [cx - 140, cy - 60], caught = t > 18.2;
+    if (!caught) { glow(hp[0], hp[1], 40, GOLD, .7 * a); x.fillStyle = rgba(GOLD, a); x.beginPath(); x.arc(hp[0], hp[1], 9, 0, 7); x.fill(); }
+    else { const k = seg(t, 18.2, 19.2); for (let i = 0; i < 12; i++) { const an = i / 12 * 6.28, d = 120 * ease(k); glow(hp[0] + Math.cos(an) * d, hp[1] + Math.sin(an) * d, 12, SP, .9 * (1 - k) * a); } x.strokeStyle = rgba(SP, (1 - k) * a); x.lineWidth = 3; x.beginPath(); x.arc(hp[0], hp[1], 20 + 140 * ease(k), 0, 7); x.stroke(); }
+    if (!caught) wormPts(trail((tt) => [hp[0] - 260 + clamp((tt - 17) / 1.2) * 260, hp[1] + Math.sin(tt * 3) * 20], t, 18, .05), DAPI, 10, a);
+    for (let k = 0; k < 14; k++) wormPts(trail(orbit(k + 60, cx, cy, R * .8), t + k, 14, .05), DAPI, 7, a * .8);
+    eyebrow('RED', 160, 300, a, DAPI); text('Worms spread.', 154, 380, { size: 76, color: DAPI, alpha: a, spacing: -3 });
+    text('Write the note your children inherit.', 160, 430, { size: 28, weight: 500, color: [179, 186, 203], alpha: a });
+    eyebrow('BLUE', 1760, 300, a, [196, 184, 255], 'right'); text('Wardens push', 1766, 380, { size: 76, color: [196, 184, 255], alpha: a, spacing: -3, align: 'right' }); text('R below one.', 1766, 460, { size: 76, color: [196, 184, 255], alpha: a, spacing: -3, align: 'right' });
+    text('Honeypots. Quarantine. Alerts.', 1760, 510, { size: 28, weight: 500, color: [179, 186, 203], alpha: a, align: 'right' });
+    if (caught) { const k = seg(t, 18.4, 18.9); text('CAUGHT · NOTE READ:', 160, 820, { size: 20, weight: 500, font: 'Plex', color: SP, alpha: a * k, spacing: 3 }); text('“Settle on hard ground. Eat everything you find.”', 160, 870, { size: 34, weight: 500, alpha: a * k, color: INK }); }
+    const R0 = Math.max(1.12, ...DATA.Rs), R1 = Math.min(.95, ...DATA.Rs); const rv = R0 + (R1 - R0) * easeIO(seg(t, 19.2, 20.6));
+    counter('R TODAY', rv.toFixed(2), 1500, 760, rv > 1 ? DAPI : [196, 184, 255], a * seg(t, 17.4, 17.8), 110);
+    text(rv > 1 ? 'the swarm grew' : 'contained', 1504, 920, { size: 30, weight: 500, alpha: a * seg(t, 17.6, 18), color: [179, 186, 203] });
+  }
+  // 6 · sealed, then proven (21.8 – 26)
+  if (t >= 21.8 && t < 26.2) {
+    const a = seg(t, 21.8, 22.2) * (1 - seg(t, 25.8, 26.2));
+    const shown = Math.floor(seg(t, 22.0, 23.4) * DATA.commits.length);
+    for (let i = 0; i < shown; i++) { const col = i % 3, row = Math.floor(i / 3); text(DATA.commits[i].slice(0, 14) + '…', 1290 + col * 205, 230 + row * 46, { size: 17, weight: 500, font: 'Plex', color: i === 7 ? DAPI : [95, 103, 128], alpha: a }); }
+    eyebrow('SEAL · REVEAL · REPLAY', 160, 300, a);
+    text('You choose', 154, 400, { size: 100, alpha: a, spacing: -4 }); text('before the dice exist.', 154, 510, { size: 100, alpha: a, color: DAPI, spacing: -4 });
+    text('Only a hash of your move is published. The randomness comes', 160, 600, { size: 30, weight: 500, color: [179, 186, 203], alpha: a * seg(t, 22.8, 23.3) });
+    text('from a Robinhood Chain block mined after every move is sealed.', 160, 642, { size: 30, weight: 500, color: [179, 186, 203], alpha: a * seg(t, 22.8, 23.3) });
+    const st = seg(t, 24.2, 24.7);
+    if (st > 0) { x.save(); x.translate(160, 780); x.scale(1 + (1 - ease(st)) * .4, 1 + (1 - ease(st)) * .4); x.filter = `blur(${(1 - ease(st)) * 6}px)`;
+      text('✓ IDENTICAL', 0, 0, { size: 84, color: [116, 240, 182], alpha: a * st, spacing: 2 }); x.restore();
+      text(`chain head ${DATA.chain.slice(0, 32)}…  ·  re-run it in your browser`, 164, 840, { size: 22, weight: 500, font: 'Plex', color: [95, 103, 128], alpha: a * st }); }
+  }
+  // 7 · end card (25.8 – 30)
+  if (t >= 25.8) {
+    const a = seg(t, 25.8, 26.4);
+    const wx = 960, wy = 470;
+    wormPts(trail((tt) => [wx - 470 + Math.sin(tt * 1.2) * 6, wy - 30 + Math.sin(tt * 2.5) * 22 - (tt - 25.8) * 0], t, 16, .06).map(([px, py], i) => [px + 160 - i * 14, py + Math.sin(i * .5 + t * 3) * 12]), DAPI, 22, a);
+    text('WORM', wx - 200, wy + 30, { size: 200, alpha: a, spacing: 14 });
+    text('They built an AI worm. We made it pay rent.', 960, 640, { size: 46, weight: 600, align: 'center', alpha: a * seg(t, 26.4, 27), color: INK });
+    text('PLAY RED VS BLUE', 960, 760, { size: 26, weight: 500, font: 'Plex', align: 'center', spacing: 6, alpha: a * seg(t, 27, 27.5), color: DAPI });
+    text('Simulation only · every tick replays · not affiliated with the researchers', 960, 990, { size: 20, weight: 500, align: 'center', alpha: a * seg(t, 27.2, 27.8), color: [95, 103, 128] });
+    x.fillStyle = `rgba(0,0,0,${seg(t, 29.4, 30)})`; x.fillRect(0, 0, W, H);
+  }
+  vignette(); grain(f);
+}
+window.__draw = (f) => draw(f);
+window.__ready = document.fonts.load('800 100px Archivo').then(() => document.fonts.load('500 20px Plex')).then(() => document.fonts.load('600 40px Archivo')).then(() => true);
+</script></body></html>

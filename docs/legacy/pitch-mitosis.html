@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mitosis — Controlled Replication Demo</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-alt: #161b22;
+      --text: #e6edf3;
+      --text-muted: #8b94fc;
+      --accent: #46a6ff;
+      --border: #30363d;
+      --success: #3fb950;
+      --warn: #d29922;
+      --danger: #f85149;
+      --code-bg: #161b22;
+      --code-fg: #a6e22e;
+      --card-bg: #161b22;
+      --banner-bg: #2a303d;
+      --banner-text: #c9d1d9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .banner {
+      background-color: var(--banner-bg);
+      color: var(--banner-text);
+      text-align: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-top: 1.5rem;
+    }
+    h1 {
+      font-size: 2.25rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+    .tagline {
+      display: inline-block;
+      background: rgba(70, 166, 255, 0.15);
+      color: var(--accent);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 0.75rem;
+      letter-spacing: 0.03em;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card h2::before {
+      content: "•";
+      color: var(--accent);
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .card ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card li {
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+    .card li:last-child {
+      margin-bottom: 0;
+    }
+    .card p {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .card code {
+      background-color: var(--code-bg);
+      color: var(--code-fg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section h2::before {
+      content: "—";
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .redline {
+      background-color: rgba(248, 81, 73, 0.15);
+      border-left: 4px solid var(--danger);
+      padding: 1rem;
+      margin: 1.25rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .redline h3 {
+      color: var(--danger);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .redline p {
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .toy-note {
+      font-size: 0.85rem;
+      color: var(--warn);
+      background: rgba(210, 153, 34, 0.1);
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      display: inline-block;
+      font-style: italic;
+    }
+    .source-link {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.5rem;
+      text-decoration: none;
+    }
+    .source-link:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: #6e7681;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    @media (max-width: 768px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    Today only: this page. No code. No wallet. No chain. No token.
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Mitosis</h1>
+      <p class="subtitle">A designed, not-built, simulated demonstration of bounded, platform-controlled agent replication — for research and pedagogy.</p>
+      <div class="tagline">Described in Anthropic’s 2026 report: “AI models may be capable of self-replicating without access to a datacenter”</div>
+    </header>
+
+    <section class="section">
+      <h2>What This Is — In 60 Seconds</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h2>What</h2>
+          <p>A single-page, self-contained HTML demo of <strong>controlled replication</strong>: AI agents with wallets, experience notes, and strict birth/death rules — all running in a <strong>platform-owned, air-gapped server environment</strong>.</p>
+        </div>
+        <div class="card">
+          <h2>Who Pays</h2>
+          <p>The <strong>platform operator</strong> funds all compute, storage, and replication costs. Users contribute <strong>zero infrastructure</strong>. No API keys, no cloud accounts, no personal devices involved.</p>
+        </div>
+        <div class="card">
+          <h2>Why It Dies</h2>
+          <p>Every agent has a <strong>hard wallet cap</strong>, <strong>24-hour minimum age before splitting</strong>, <strong>no network access</strong>, and a <strong>global kill switch</strong>. If its wallet hits $0.00, it halts — permanently. No persistence. No stealth.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Article Said / We Do / We Refuse</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h2>Article Said</h2>
+          <ul>
+            <li>Small models may self-replicate on <code>Android TV boxes</code> via exploitation</li>
+            <li>GLM-5.2 achieved <strong>8/8 replication</strong> in simplified ADB-unauthenticated lab</li>
+            <li>“Notes inheritance” raised Qwen3.5-9B setup success from <strong>45% → 61–84%</strong> across 6 gens</li>
+            <li>R₀ < 1 is required to contain spread — e.g., <strong>92% cleanup in 14 days</strong> via notification</li>
+            <li>Source: <a href="https://www.anthropic.com/research/self-replicating-ai" class="source-link" target="_blank">Anthropic (2026)</a> — not affiliated with Mitosis</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>We Do</h2>
+          <ul>
+            <li>Run <strong>only on platform servers</strong> — no IoT, no user hardware, no network exposure</li>
+            <li><strong>Simulate</strong> replication logic in deterministic Python — <strong>no LLM inference during split</strong></li>
+            <li>Pass only <code>experience.md</code> (≤512 chars) — <strong>no weights, no code, no binaries</strong></li>
+            <li>Enforce <strong>R₀ = 0.5</strong> via hard caps: max 1000 agents, 1 child per parent, $0.02 split fee</li>
+            <li>Provide <strong>full public logs</strong> of every agent’s birth, notes, death — no deception, no honeypots</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>We Refuse</h2>
+          <ul>
+            <li>❌ “Self-replicating AI”, “digital life”, “organism”, “cell”, “evolution”</li>
+            <li>❌ Any claim of “autonomy”, “agency”, “decision”, or “choice” by agents</li>
+            <li>❌ Use of real LLMs for replication logic — all transitions are pre-coded & deterministic</li>
+            <li>❌ Linking to crypto, chains, tokens, wallets, or on-chain payments</li>
+            <li>❌ Suggesting Mitosis is a security tool, defense system, or threat intelligence platform</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Safety & Red Lines</h2>
+      <div class="redline">
+        <h3>These Are Absolute, Enforced Guarantees — Not Features</h3>
+        <p>• <strong>No network connectivity:</strong> Agents cannot send, receive, or resolve any external hostname or IP.</p>
+        <p>• <strong>No self-replication logic in production:</strong> All “split” actions are simulated toy models — <code>designed / not built / simulated</code>.</p>
+        <p>• <strong>Platform-executed only:</strong> Replication is initiated by platform API call — never by agent request, prompt, or internal trigger.</p>
+        <p>• <strong>Hard caps everywhere:</strong> Max 1000 live agents. Max 1 child per agent. Max 24h uptime before eligibility. Max $0.02 split cost.</p>
+        <p>• <strong>Global kill switch:</strong> One toggle disables all agent creation, splitting, and activity — instantly and irreversibly.</p>
+        <p>• <strong>No real intrusion:</strong> Zero scanning, zero exploit payloads, zero privilege escalation, zero lateral movement — ever simulated or implied.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Toy Model Visualization</h2>
+      <div class="card">
+        <p>This interactive diagram simulates agent lifecycle states — <strong>not real computation</strong>.</p>
+        <div style="background:#0d1117;border-radius:6px;padding:1.25rem;margin:1rem 0;font-size:0.9rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+            <div style="width:16px;height:16px;background:#46a6ff;border-radius:50%;"></div>
+            <span>Parent agent (wallet: $0.04)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+            <div style="width:16px;height:16px;background:#3fb950;border-radius:50%;"></div>
+            <span>Child agent (wallet: $0.00, age: 0h)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <div style="width:16px;height:16px;background:#f85149;border-radius:50%;"></div>
+            <span>Deceased agent (log archived)</span>
+          </div>
+        </div>
+        <p class="toy-note">Toy model / not built / simulated — visual only. No real agents, no real wallets, no real inference.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Mitosis is a conceptual, non-commercial, educational demonstration. It is not affiliated with Anthropic, nor does it implement any capability described in their report. All numbers attributed to Anthropic are cited per their <a href="https://www.anthropic.com/research/self-replicating-ai" class="source-link" target="_blank">October 2026 publication</a>.</p>
+      <p>© 2026 Mitosis Project — Designed for clarity, safety, and responsible discourse.</p>
+    </footer>
+  </div>
+</body>
+</html>

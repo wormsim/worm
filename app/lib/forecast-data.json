@@ -1,0 +1,642 @@
+{
+ "v": "forecast/1",
+ "calibration": [
+  {
+   "gen": 0,
+   "tries": 1787,
+   "rate": 0.454
+  },
+  {
+   "gen": 1,
+   "tries": 1471,
+   "rate": 0.589
+  },
+  {
+   "gen": 2,
+   "tries": 1494,
+   "rate": 0.668
+  },
+  {
+   "gen": 3,
+   "tries": 1036,
+   "rate": 0.728
+  },
+  {
+   "gen": 4,
+   "tries": 441,
+   "rate": 0.735
+  },
+  {
+   "gen": 5,
+   "tries": 111,
+   "rate": 0.712
+  },
+  {
+   "gen": 6,
+   "tries": 20,
+   "rate": 0.8
+  },
+  {
+   "gen": 7,
+   "tries": 2,
+   "rate": 1
+  }
+ ],
+ "engine": "outbreak/2",
+ "seeds": 24,
+ "setupPerYear": 0.85,
+ "cells": [
+  {
+   "pkg": "none",
+   "era": 0,
+   "year": 2026,
+   "meanR": 1.332,
+   "held": 0.167,
+   "lid": 0.375,
+   "finalAlive": 135
+  },
+  {
+   "pkg": "none",
+   "era": 1,
+   "year": 2027,
+   "meanR": 1.38,
+   "held": 0.125,
+   "lid": 0.458,
+   "finalAlive": 140
+  },
+  {
+   "pkg": "none",
+   "era": 2,
+   "year": 2028,
+   "meanR": 1.368,
+   "held": 0.125,
+   "lid": 0.417,
+   "finalAlive": 134
+  },
+  {
+   "pkg": "none",
+   "era": 3,
+   "year": 2029,
+   "meanR": 1.342,
+   "held": 0.25,
+   "lid": 0.417,
+   "finalAlive": 133
+  },
+  {
+   "pkg": "none",
+   "era": 4,
+   "year": 2030,
+   "meanR": 1.38,
+   "held": 0.333,
+   "lid": 0.458,
+   "finalAlive": 135
+  },
+  {
+   "pkg": "none",
+   "era": 5,
+   "year": 2031,
+   "meanR": 1.393,
+   "held": 0.125,
+   "lid": 0.458,
+   "finalAlive": 139
+  },
+  {
+   "pkg": "none",
+   "era": 6,
+   "year": 2032,
+   "meanR": 1.392,
+   "held": 0.292,
+   "lid": 0.458,
+   "finalAlive": 138
+  },
+  {
+   "pkg": "none",
+   "era": 7,
+   "year": 2033,
+   "meanR": 1.43,
+   "held": 0.25,
+   "lid": 0.5,
+   "finalAlive": 142
+  },
+  {
+   "pkg": "none",
+   "era": 8,
+   "year": 2034,
+   "meanR": 1.402,
+   "held": 0.292,
+   "lid": 0.458,
+   "finalAlive": 137
+  },
+  {
+   "pkg": "none",
+   "era": 9,
+   "year": 2035,
+   "meanR": 1.399,
+   "held": 0.208,
+   "lid": 0.5,
+   "finalAlive": 139
+  },
+  {
+   "pkg": "none",
+   "era": 10,
+   "year": 2036,
+   "meanR": 1.389,
+   "held": 0.25,
+   "lid": 0.417,
+   "finalAlive": 131
+  },
+  {
+   "pkg": "none",
+   "era": 11,
+   "year": 2037,
+   "meanR": 1.384,
+   "held": 0.292,
+   "lid": 0.417,
+   "finalAlive": 135
+  },
+  {
+   "pkg": "none",
+   "era": 12,
+   "year": 2038,
+   "meanR": 1.381,
+   "held": 0.292,
+   "lid": 0.417,
+   "finalAlive": 135
+  },
+  {
+   "pkg": "quarantine",
+   "era": 0,
+   "year": 2026,
+   "meanR": 1.283,
+   "held": 0.083,
+   "lid": 0.042,
+   "finalAlive": 97
+  },
+  {
+   "pkg": "quarantine",
+   "era": 1,
+   "year": 2027,
+   "meanR": 1.342,
+   "held": 0.042,
+   "lid": 0.167,
+   "finalAlive": 117
+  },
+  {
+   "pkg": "quarantine",
+   "era": 2,
+   "year": 2028,
+   "meanR": 1.357,
+   "held": 0.042,
+   "lid": 0.208,
+   "finalAlive": 127
+  },
+  {
+   "pkg": "quarantine",
+   "era": 3,
+   "year": 2029,
+   "meanR": 1.298,
+   "held": 0,
+   "lid": 0.083,
+   "finalAlive": 102
+  },
+  {
+   "pkg": "quarantine",
+   "era": 4,
+   "year": 2030,
+   "meanR": 1.348,
+   "held": 0.125,
+   "lid": 0.208,
+   "finalAlive": 123
+  },
+  {
+   "pkg": "quarantine",
+   "era": 5,
+   "year": 2031,
+   "meanR": 1.313,
+   "held": 0.125,
+   "lid": 0.125,
+   "finalAlive": 110
+  },
+  {
+   "pkg": "quarantine",
+   "era": 6,
+   "year": 2032,
+   "meanR": 1.325,
+   "held": 0.083,
+   "lid": 0.167,
+   "finalAlive": 117
+  },
+  {
+   "pkg": "quarantine",
+   "era": 7,
+   "year": 2033,
+   "meanR": 1.342,
+   "held": 0,
+   "lid": 0.167,
+   "finalAlive": 122
+  },
+  {
+   "pkg": "quarantine",
+   "era": 8,
+   "year": 2034,
+   "meanR": 1.375,
+   "held": 0,
+   "lid": 0.167,
+   "finalAlive": 126
+  },
+  {
+   "pkg": "quarantine",
+   "era": 9,
+   "year": 2035,
+   "meanR": 1.34,
+   "held": 0.083,
+   "lid": 0.125,
+   "finalAlive": 120
+  },
+  {
+   "pkg": "quarantine",
+   "era": 10,
+   "year": 2036,
+   "meanR": 1.334,
+   "held": 0.083,
+   "lid": 0.208,
+   "finalAlive": 125
+  },
+  {
+   "pkg": "quarantine",
+   "era": 11,
+   "year": 2037,
+   "meanR": 1.376,
+   "held": 0,
+   "lid": 0.208,
+   "finalAlive": 127
+  },
+  {
+   "pkg": "quarantine",
+   "era": 12,
+   "year": 2038,
+   "meanR": 1.356,
+   "held": 0.042,
+   "lid": 0.167,
+   "finalAlive": 124
+  },
+  {
+   "pkg": "notify",
+   "era": 0,
+   "year": 2026,
+   "meanR": 1.252,
+   "held": 0.042,
+   "lid": 0.042,
+   "finalAlive": 94
+  },
+  {
+   "pkg": "notify",
+   "era": 1,
+   "year": 2027,
+   "meanR": 1.249,
+   "held": 0.083,
+   "lid": 0.042,
+   "finalAlive": 97
+  },
+  {
+   "pkg": "notify",
+   "era": 2,
+   "year": 2028,
+   "meanR": 1.301,
+   "held": 0.083,
+   "lid": 0.125,
+   "finalAlive": 106
+  },
+  {
+   "pkg": "notify",
+   "era": 3,
+   "year": 2029,
+   "meanR": 1.215,
+   "held": 0.125,
+   "lid": 0,
+   "finalAlive": 83
+  },
+  {
+   "pkg": "notify",
+   "era": 4,
+   "year": 2030,
+   "meanR": 1.231,
+   "held": 0.125,
+   "lid": 0.083,
+   "finalAlive": 97
+  },
+  {
+   "pkg": "notify",
+   "era": 5,
+   "year": 2031,
+   "meanR": 1.283,
+   "held": 0.125,
+   "lid": 0.125,
+   "finalAlive": 107
+  },
+  {
+   "pkg": "notify",
+   "era": 6,
+   "year": 2032,
+   "meanR": 1.274,
+   "held": 0.167,
+   "lid": 0.125,
+   "finalAlive": 104
+  },
+  {
+   "pkg": "notify",
+   "era": 7,
+   "year": 2033,
+   "meanR": 1.268,
+   "held": 0.167,
+   "lid": 0.083,
+   "finalAlive": 98
+  },
+  {
+   "pkg": "notify",
+   "era": 8,
+   "year": 2034,
+   "meanR": 1.327,
+   "held": 0.083,
+   "lid": 0.208,
+   "finalAlive": 120
+  },
+  {
+   "pkg": "notify",
+   "era": 9,
+   "year": 2035,
+   "meanR": 1.284,
+   "held": 0.208,
+   "lid": 0.042,
+   "finalAlive": 98
+  },
+  {
+   "pkg": "notify",
+   "era": 10,
+   "year": 2036,
+   "meanR": 1.323,
+   "held": 0.083,
+   "lid": 0.167,
+   "finalAlive": 120
+  },
+  {
+   "pkg": "notify",
+   "era": 11,
+   "year": 2037,
+   "meanR": 1.325,
+   "held": 0.083,
+   "lid": 0.208,
+   "finalAlive": 121
+  },
+  {
+   "pkg": "notify",
+   "era": 12,
+   "year": 2038,
+   "meanR": 1.327,
+   "held": 0.167,
+   "lid": 0.208,
+   "finalAlive": 122
+  },
+  {
+   "pkg": "honeypot",
+   "era": 0,
+   "year": 2026,
+   "meanR": 1.158,
+   "held": 0.25,
+   "lid": 0,
+   "finalAlive": 67
+  },
+  {
+   "pkg": "honeypot",
+   "era": 1,
+   "year": 2027,
+   "meanR": 1.211,
+   "held": 0.167,
+   "lid": 0,
+   "finalAlive": 79
+  },
+  {
+   "pkg": "honeypot",
+   "era": 2,
+   "year": 2028,
+   "meanR": 1.219,
+   "held": 0.167,
+   "lid": 0.042,
+   "finalAlive": 79
+  },
+  {
+   "pkg": "honeypot",
+   "era": 3,
+   "year": 2029,
+   "meanR": 1.134,
+   "held": 0.25,
+   "lid": 0.125,
+   "finalAlive": 72
+  },
+  {
+   "pkg": "honeypot",
+   "era": 4,
+   "year": 2030,
+   "meanR": 1.139,
+   "held": 0.25,
+   "lid": 0.042,
+   "finalAlive": 72
+  },
+  {
+   "pkg": "honeypot",
+   "era": 5,
+   "year": 2031,
+   "meanR": 1.087,
+   "held": 0.333,
+   "lid": 0.042,
+   "finalAlive": 63
+  },
+  {
+   "pkg": "honeypot",
+   "era": 6,
+   "year": 2032,
+   "meanR": 1.103,
+   "held": 0.333,
+   "lid": 0.083,
+   "finalAlive": 76
+  },
+  {
+   "pkg": "honeypot",
+   "era": 7,
+   "year": 2033,
+   "meanR": 1.163,
+   "held": 0.25,
+   "lid": 0.167,
+   "finalAlive": 87
+  },
+  {
+   "pkg": "honeypot",
+   "era": 8,
+   "year": 2034,
+   "meanR": 1.09,
+   "held": 0.333,
+   "lid": 0,
+   "finalAlive": 64
+  },
+  {
+   "pkg": "honeypot",
+   "era": 9,
+   "year": 2035,
+   "meanR": 1.14,
+   "held": 0.292,
+   "lid": 0.042,
+   "finalAlive": 76
+  },
+  {
+   "pkg": "honeypot",
+   "era": 10,
+   "year": 2036,
+   "meanR": 1.152,
+   "held": 0.292,
+   "lid": 0.125,
+   "finalAlive": 87
+  },
+  {
+   "pkg": "honeypot",
+   "era": 11,
+   "year": 2037,
+   "meanR": 1.181,
+   "held": 0.167,
+   "lid": 0.042,
+   "finalAlive": 80
+  },
+  {
+   "pkg": "honeypot",
+   "era": 12,
+   "year": 2038,
+   "meanR": 1.196,
+   "held": 0.208,
+   "lid": 0.042,
+   "finalAlive": 80
+  },
+  {
+   "pkg": "all",
+   "era": 0,
+   "year": 2026,
+   "meanR": 0.851,
+   "held": 0.917,
+   "lid": 0,
+   "finalAlive": 28
+  },
+  {
+   "pkg": "all",
+   "era": 1,
+   "year": 2027,
+   "meanR": 0.951,
+   "held": 0.667,
+   "lid": 0,
+   "finalAlive": 35
+  },
+  {
+   "pkg": "all",
+   "era": 2,
+   "year": 2028,
+   "meanR": 0.997,
+   "held": 0.625,
+   "lid": 0,
+   "finalAlive": 41
+  },
+  {
+   "pkg": "all",
+   "era": 3,
+   "year": 2029,
+   "meanR": 0.863,
+   "held": 0.667,
+   "lid": 0,
+   "finalAlive": 30
+  },
+  {
+   "pkg": "all",
+   "era": 4,
+   "year": 2030,
+   "meanR": 0.897,
+   "held": 0.625,
+   "lid": 0,
+   "finalAlive": 38
+  },
+  {
+   "pkg": "all",
+   "era": 5,
+   "year": 2031,
+   "meanR": 0.854,
+   "held": 0.792,
+   "lid": 0,
+   "finalAlive": 34
+  },
+  {
+   "pkg": "all",
+   "era": 6,
+   "year": 2032,
+   "meanR": 0.947,
+   "held": 0.708,
+   "lid": 0,
+   "finalAlive": 43
+  },
+  {
+   "pkg": "all",
+   "era": 7,
+   "year": 2033,
+   "meanR": 0.996,
+   "held": 0.625,
+   "lid": 0,
+   "finalAlive": 49
+  },
+  {
+   "pkg": "all",
+   "era": 8,
+   "year": 2034,
+   "meanR": 0.983,
+   "held": 0.5,
+   "lid": 0,
+   "finalAlive": 48
+  },
+  {
+   "pkg": "all",
+   "era": 9,
+   "year": 2035,
+   "meanR": 0.967,
+   "held": 0.583,
+   "lid": 0,
+   "finalAlive": 54
+  },
+  {
+   "pkg": "all",
+   "era": 10,
+   "year": 2036,
+   "meanR": 1.001,
+   "held": 0.458,
+   "lid": 0,
+   "finalAlive": 56
+  },
+  {
+   "pkg": "all",
+   "era": 11,
+   "year": 2037,
+   "meanR": 1.014,
+   "held": 0.583,
+   "lid": 0,
+   "finalAlive": 50
+  },
+  {
+   "pkg": "all",
+   "era": 12,
+   "year": 2038,
+   "meanR": 1.076,
+   "held": 0.417,
+   "lid": 0.083,
+   "finalAlive": 69
+  }
+ ],
+ "crossovers": {
+  "none": 2026,
+  "quarantine": 2026,
+  "notify": 2026,
+  "honeypot": 2026,
+  "all": 2036
+ }
+}

@@ -1,0 +1,5 @@
+{
+  "_comment": "Every daily anchor this project has written on chain, newest last. An entry is added only after the transaction is confirmed — this file records facts, never intentions. `npm run verify:anchors` recomputes each day's chain head from the code and fails if any hash here disagrees, and tests/anchors.test.ts does the same in CI. Memo format: worm:1|<day>|<YYYY-MM-DD>|<seed>|<ticks>|<chainHash>",
+  "memoVersion": 1,
+  "anchors": []
+}

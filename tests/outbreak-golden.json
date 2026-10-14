@@ -1,0 +1,32 @@
+{
+  "worm": {
+    "seed": 20261013,
+    "days": 7,
+    "over": "won",
+    "score": 2655,
+    "head": "12d2b4d298b29fe935bab495cb83311197fbdd303eb91b518c4679d57e82c55a",
+    "dayHeads": [
+      "7bea402d8a0d1c65c6ae3866fac2ba72508fe12ca2c1af47e48fbe1b73f8ecce",
+      "727577c87da03952571a10f079d7f3047bc5753d095219b3d2374b0faa9c42a0",
+      "9327719f425d3fb6f6e72892deec394ba0d2b9b92dad5af79b2e93a005070636",
+      "d1e3bfe50a555c24e6b77b506ae5f1eafa802997c5c6d7a81c4e0077e10c0a0f",
+      "cd4289ea32f56a8e5df19c19f215229b072da6dc994dc336192c024ac600f1a3",
+      "3c285f91f45ba520b9a44a6180287b68505a8ba5d24f28d09cb20e7d0ec200ff",
+      "12d2b4d298b29fe935bab495cb83311197fbdd303eb91b518c4679d57e82c55a"
+    ],
+    "inputs": 156
+  },
+  "warden": {
+    "seed": 20261013,
+    "days": 3,
+    "over": "outbreak",
+    "score": 83,
+    "head": "4297559ad5054e2d51624f2fe35c0cda9cb6ca2bf81d8030e5ab15ea496d0b8a",
+    "dayHeads": [
+      "ecbb608c89810cc82f64d9af64331db157d1d9b2178bb3c743a082e8a7edba55",
+      "90e9f7fbc161e125b86d5ec9564959bd14255dfea785ae777797d10e7e1fb059",
+      "4297559ad5054e2d51624f2fe35c0cda9cb6ca2bf81d8030e5ab15ea496d0b8a"
+    ],
+    "inputs": 1232
+  }
+}

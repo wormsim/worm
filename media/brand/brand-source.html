@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:Archivo;src:url(archivo.woff2) format('woff2');font-weight:100 900;font-stretch:62% 125%}
+@font-face{font-family:Plex;src:url(plex500.woff2) format('woff2');font-weight:500}
+body{margin:0;background:#000}
+canvas{display:block}
+</style></head><body>
+<canvas id="c"></canvas>
+<script>
+const params = new URLSearchParams(location.search);
+const kind = params.get('k') || 'avatar';
+const W = +params.get('w') || 400, H = +params.get('h') || 400;
+const c = document.getElementById('c'); c.width = W; c.height = H; c.style.width = W + 'px'; c.style.height = H + 'px';
+const x = c.getContext('2d');
+const DAPI = [92,225,255], SP = [255,95,183], DEEP = [150,140,255], AMB = [255,181,71];
+const rgba = (k, a) => `rgba(${k[0]},${k[1]},${k[2]},${a})`;
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+function glow(px, py, r, k, a) { const g = x.createRadialGradient(px, py, 0, px, py, r); g.addColorStop(0, rgba(k, a)); g.addColorStop(1, rgba(k, 0)); x.fillStyle = g; x.beginPath(); x.arc(px, py, r, 0, 7); x.fill(); }
+function worm(cx, cy, dir, len, w, k, phase, bright = 1) {
+  const pts = []; const n = 16;
+  for (let i = 0; i < n; i++) { const q = i / (n - 1); const along = (0.5 - q) * len; const side = Math.sin(q * 5.2 + phase) * w * 1.6 * q;
+    pts.push([cx + Math.cos(dir) * along - Math.sin(dir) * side, cy + Math.sin(dir) * along + Math.cos(dir) * side]); }
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  x.globalCompositeOperation = 'lighter';
+  x.strokeStyle = rgba(k, 0.10 * bright); x.lineWidth = w * 3.4; x.beginPath(); pts.forEach(([a, b], i) => i ? x.lineTo(a, b) : x.moveTo(a, b)); x.stroke();
+  x.globalCompositeOperation = 'source-over';
+  for (let i = 0; i < n - 1; i++) { const q = i / (n - 1); const taper = q < .1 ? .75 + q * 2.5 : 1 - Math.max(0, q - .55) * 1.4;
+    x.strokeStyle = `rgb(${12 + k[0] * .3 * bright},${18 + k[1] * .3 * bright},${30 + k[2] * .3 * bright})`; x.lineWidth = w * 2 * taper;
+    x.beginPath(); x.moveTo(...pts[i]); x.lineTo(...pts[i + 1]); x.stroke(); }
+  x.strokeStyle = rgba(k, .35 * bright); x.lineWidth = Math.max(1, w * .12);
+  for (let i = 2; i < n - 2; i += 2) { const [a, b] = pts[i - 1], [cc, d] = pts[i + 1]; const ux = cc - a, uy = d - b, L = Math.hypot(ux, uy) || 1, nx = -uy / L, ny = ux / L, hw = w * .85;
+    x.beginPath(); x.moveTo(pts[i][0] + nx * hw, pts[i][1] + ny * hw); x.lineTo(pts[i][0] - nx * hw, pts[i][1] - ny * hw); x.stroke(); }
+  x.globalCompositeOperation = 'lighter';
+  x.strokeStyle = rgba([235, 250, 255], .75 * bright); x.lineWidth = w * .55; x.beginPath(); pts.slice(1, 11).forEach(([a, b], i) => i ? x.lineTo(a, b) : x.moveTo(a, b)); x.stroke();
+  glow(pts[0][0], pts[0][1], w * 3.2, k, .55 * bright);
+  x.globalCompositeOperation = 'source-over';
+  x.fillStyle = '#e8fbff'; x.beginPath(); x.arc(pts[0][0], pts[0][1], w * 1.05, 0, 7); x.fill();
+  return pts;
+}
+function dish(cx, cy, R, ticks = true) {
+  const g = x.createRadialGradient(cx, cy - R * .2, R * .05, cx, cy, R * 1.05); g.addColorStop(0, '#0e1a2e'); g.addColorStop(.7, '#070b14'); g.addColorStop(1, '#04060a');
+  x.fillStyle = g; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.fill();
+  x.save(); x.beginPath(); x.arc(cx, cy, R, 0, 7); x.clip(); x.strokeStyle = '#111b2c'; x.lineWidth = 1; x.beginPath();
+  for (let i = cx % 28; i < W; i += 28) { x.moveTo(i, 0); x.lineTo(i, H); } for (let j = cy % 28; j < H; j += 28) { x.moveTo(0, j); x.lineTo(W, j); } x.stroke(); x.restore();
+  x.strokeStyle = '#2c3b58'; x.lineWidth = 1.5; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.stroke();
+  if (ticks) for (let i = 0; i < 180; i++) { const a = i / 180 * Math.PI * 2, L = i % 15 === 0 ? 14 : i % 5 === 0 ? 9 : 6; x.strokeStyle = i % 15 === 0 ? '#4a5c80' : '#1d2840'; x.beginPath(); x.moveTo(cx + Math.cos(a) * (R + 5), cy + Math.sin(a) * (R + 5)); x.lineTo(cx + Math.cos(a) * (R + 5 + L), cy + Math.sin(a) * (R + 5 + L)); x.stroke(); }
+}
+function grain() { const d = x.getImageData(0, 0, W, H); for (let i = 0; i < d.data.length; i += 4) { const n = (rnd() - .5) * 10; d.data[i] += n; d.data[i + 1] += n; d.data[i + 2] += n; } x.putImageData(d, 0, 0); }
+
+(async () => {
+await Promise.all([document.fonts.load("800 74px Archivo"), document.fonts.load("500 17px Plex"), document.fonts.load("500 24px Archivo")]);
+x.fillStyle = '#05060a'; x.fillRect(0, 0, W, H);
+if (kind === 'avatar') {
+  const s = W / 400;
+  glow(W / 2, H / 2, W * .55, DAPI, .10);
+  // one worm, splitting: two halves pulled apart, a pink furrow between them
+  const cx = W / 2, cy = H / 2;
+  worm(cx - 66 * s, cy + 12 * s, Math.PI * 1.04, 160 * s, 19 * s, DAPI, 0.6);
+  worm(cx + 66 * s, cy - 12 * s, -0.04, 160 * s, 19 * s, DAPI, 2.2);
+  glow(cx, cy, 44 * s, SP, .75);
+  x.fillStyle = rgba(SP, .9); x.beginPath(); x.arc(cx, cy, 6 * s, 0, 7); x.fill();
+  for (let i = 0; i < 3; i++) { x.strokeStyle = rgba(SP, .55 - i * .15); x.lineWidth = 2 * s; x.beginPath(); x.arc(cx, cy, (16 + i * 13) * s, 0, 7); x.stroke(); }
+  grain();
+} else if (kind === 'banner') {
+  // left: wordmark and line; right: a dish crowded with worms, one splitting
+  const R = 205, cx = W - 330, cy = H / 2 + 6;
+  glow(cx, cy, 420, DAPI, .07); glow(W * .2, H, 380, SP, .05);
+  dish(cx, cy, R);
+  x.save(); x.beginPath(); x.arc(cx, cy, R - 6, 0, 7); x.clip();
+  for (let i = 0; i < 34; i++) { const a = i * 2.39996, r = 20 + Math.sqrt(i / 34) * (R - 50); const px = cx + Math.cos(a) * r, py = cy + Math.sin(a) * r;
+    const k = i % 9 === 4 ? AMB : i % 5 === 0 ? DEEP : DAPI; worm(px, py, a * 1.7 + rnd(), 46 + rnd() * 14, 4.2, k, i, i % 9 === 4 ? .8 : 1); }
+  x.restore();
+  x.strokeStyle = rgba(SP, .95); x.lineWidth = 3; x.lineCap = 'round'; x.beginPath(); x.arc(cx, cy, R + 22, -Math.PI / 2, -Math.PI / 2 + Math.PI * 1.55); x.stroke();
+  x.fillStyle = '#5ce1ff'; x.font = '500 17px Plex'; x.fillText('THE AI WORM, IN A JAR  ·  SIMULATION ONLY  ·  EVERY TICK REPLAYS', 92, 86);
+  x.fillStyle = '#eef1f8'; x.font = '800 60px Archivo';
+  x.letterSpacing = '-2px';
+  x.fillText('They built an AI worm.', 88, 165);
+  x.fillStyle = '#5ce1ff'; x.fillText('We made it pay rent.', 88, 235);
+  x.fillStyle = '#ff5fb7'; x.fillRect(92, 270, 3, 50);
+  x.fillStyle = '#b3bacb'; x.font = '500 24px Archivo'; x.letterSpacing = '0px';
+  x.fillText('Worms spread. Wardens push R below one.', 112, 292);
+  x.fillStyle = '#8a92a8'; x.fillText('Seal a move a day. Re-run every tick yourself.', 112, 322);
+  grain();
+} else if (kind === 'wordmark') {
+  x.clearRect(0, 0, W, H);
+  x.fillStyle = '#05060a'; x.fillRect(0, 0, W, H);
+  worm(H * .62, H / 2, 0, H * .95, H * .07, DAPI, 1.4);
+  x.fillStyle = '#eef1f8'; x.font = `800 ${H * .56}px Archivo`; x.letterSpacing = `${H * .04}px`; x.textBaseline = 'middle';
+  x.fillText('WORM', H * 1.35, H * .53);
+}
+document.title = 'ready';
+})();
+</script></body></html>

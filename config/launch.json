@@ -1,0 +1,26 @@
+{
+  "_comment": "Single source of truth for launch facts. Pages and docs read from here instead of hard-coding a chain, a venue, an address or a status. Values still written as {{PLACEHOLDER}} are not decided: the site renders them as 'to be announced' (app/lib/launch.ts) and never prints the placeholder. When a value is final, replace it here, rebuild, and the whole site follows.",
+  "site": "{{SITE_URL}}",
+  "token": {
+    "symbol": "$WORM",
+    "name": "WORM",
+    "status": "not-live",
+    "statusNote": "No token exists. Nothing is on sale, and no airdrop is promised. Any $WORM you see today is not ours.",
+    "chain": "Robinhood Chain (chain ID 4663)",
+    "venue": "{{TOKEN_VENUE}}",
+    "contract": "{{TOKEN_CA}}",
+    "supply": "{{TOKEN_SUPPLY}}",
+    "devWallet": "{{DEV_WALLET}}",
+    "anchorWallet": "{{ANCHOR_WALLET}}",
+    "teamAllocation": "{{TEAM_ALLOCATION}}"
+  },
+  "x402": {
+    "open": false,
+    "statusNote": "Not open yet. Prices will be published here first. Nothing on this site can take a payment today."
+  },
+  "principles": [
+    "War-chest tokens are burned. They are never kept, refunded or paid out.",
+    "No bets on a side, and no payouts for picking the winner.",
+    "No dividends, no yield, no play-to-earn promises. Rewards are names, badges and places on a leaderboard."
+  ]
+}

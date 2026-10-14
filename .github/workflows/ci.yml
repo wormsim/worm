@@ -1,0 +1,34 @@
+# The point of this file is a reproducible check with no secrets: a clean checkout
+# must typecheck and pass every test with no environment file at all.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sim:
+    name: typecheck and deterministic replay tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      # The site builds from the same engine the tests exercise: one rule set, two runtimes.
+      - run: npm run build
+      # The golden vector is the contract: if this command stops reproducing the
+      # pinned hashes, either the rules changed (bump WORLD_VERSION, explain in
+      # AUDIT-LOG.md) or the engine stopped being deterministic.
+      - run: npm run replay -- --seed 20261013 --ticks 340 --check
