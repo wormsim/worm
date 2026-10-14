@@ -5,7 +5,7 @@
   <p>
     <a href="STATUS.md"><img src="https://img.shields.io/badge/status-simulation%20only-baff35" alt="simulation only"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-    <img src="https://img.shields.io/badge/dependencies-0-brightgreen" alt="zero runtime dependencies">
+    <img src="https://img.shields.io/badge/engine%20dependencies-0-brightgreen" alt="the engine has no runtime dependencies">
   </p>
 </div>
 
@@ -15,11 +15,11 @@ Read this before anything else. The gap between the two columns is the whole pro
 
 | Exists today, in this repository | Does **not** exist anywhere |
 | --- | --- |
-| A deterministic engine: `sim/engine.ts` (one seeded PRNG, fixed tick order, integer arithmetic) | A wallet, a key, a chain, a payment rail |
+| A deterministic engine: `sim/engine.ts` (one seeded PRNG, fixed tick order, integer arithmetic) | Custody or payment — a wallet only signs a message that seals a move, and nothing here can move or approve funds |
 | A SHA-256 record hash and hash chain over every tick, recomputable by anyone | x402, USDC, any real money moving |
-| Thirteen tests, run in CI, including golden vectors and a cross-check of SHA-256 against `node:crypto` | An agent that can act outside this process |
+| 56 tests, run in CI, including golden vectors and a cross-check of SHA-256 against `node:crypto` | An agent that can act outside this process |
 | A CLI that replays a seed and prints the commitment: `npm run replay` | A token, a sale, an airdrop, a date |
-| A pitch page ([`pitch/index.html`](pitch/index.html)) that states all of the above | A public repository or a hosted service |
+| A pitch page ([`pitch/index.html`](pitch/index.html)) that states all of the above | An anchor on chain yet — the writer is built and tested, and `anchors/anchors.json` is still empty |
 
 **[docs/STATUS.md](docs/STATUS.md) is the single source of truth.** If this README ever disagrees
 with it, STATUS.md is right and the README is a bug.
@@ -28,7 +28,7 @@ with it, STATUS.md is right and the README is a bug.
 
 ```bash
 npm ci
-npm test                                              # 13 tests: determinism, invariants, hashes
+npm test                                              # 56 tests: determinism, invariants, hashes
 npm run replay -- --seed 20261013 --ticks 340 --check  # → IDENTICAL against the pinned golden
 ```
 
@@ -62,16 +62,19 @@ printed chain a *commitment* rather than a checksum. See [docs/DESIGN.md](docs/D
 
 ```text
 sim/            the engine: hash.ts (SHA-256 + canonical JSON), engine.ts (the rules)
-tests/          13 tests + the pinned goldens
-scripts/        replay.ts — the one-command proof
-docs/           STATUS, DESIGN, ARTICLE (the source reading), LIMITATIONS, GOVERNANCE
+app/            the site: the dish, /play, /forecast, the live season and its API routes
+tests/          56 tests + the pinned goldens
+scripts/        replay.ts (the one-command proof), anchor.ts and anchor-board.ts (daily commitments), post-daily.ts
+docs/           STATUS, DESIGN, OUTBREAK, ESSAY, FAQ, TERMS, PRIVACY, ARTICLE (the source reading), LIMITATIONS, GOVERNANCE
 pitch/          the pitch page, honest about the current state
 .github/        CI: typecheck, tests, golden replay
 ```
 
 ## Boundaries
 
-- **Simulation only.** No money moves. Nothing here connects to anything.
+- **No money moves.** The engine connects to nothing; the site reads a public RPC and a public
+  randomness beacon, and the anchor wallet writes a zero-value memo that costs only its own gas.
+  Nothing here can take a payment.
 - **No replication, in any sense of the word.** No network, no scanning, no code copied between
   machines, no model weights duplicated. An agent is a struct in an array.
 - **The economics is a toy**, tuned to show growth, generations and a squeeze. It is not a forecast
