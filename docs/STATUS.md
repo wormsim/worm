@@ -14,7 +14,7 @@ Last reviewed: 2026-10-14 (Outbreak).
 | Pinned goldens | **Built** | `tests/goldens.json` | `npm test` replays them and fails on any drift |
 | Replay CLI | **Built** | `scripts/replay.ts` | `npm run replay -- …` |
 | CI | **Built** | `.github/workflows/ci.yml` | typecheck + tests + golden replay on every push |
-| Public repository and deployed site | **Live** — the repository is public and the site runs on one server, one Node process | `github.com/wormsim/worm`, `https://worm.43.133.140.70.nip.io` | open them |
+| Public repository and deployed site | **Live** — the repository is public and the site runs on one server, one Node process | `github.com/wormsim/worm`, `https://wormsim.xyz` | open them |
 | Boundary enforcement | **Built** | `tests/boundary.test.ts` | `npm test` fails if any tracked file gains network, subprocess or environment access |
 | Pitch page | **Built**, states the simulation-only status | `pitch/index.html` | open it |
 | Homepage dish (worms) and per-worm pages | **Built** — one page per agent of the pinned run, with a diary generated from sealed events | `app/page.tsx`, `app/worm/[id]`, `app/lib/wormbook.ts` | open `/worm/30`; every diary line carries its tick's record hash |

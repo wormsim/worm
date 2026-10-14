@@ -16,7 +16,7 @@ every tick that your browser — or any machine — recomputes to the same bytes
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![money](https://img.shields.io/badge/money-none-baff35)](docs/STATUS.md)
 
-[**The dish**](https://worm.43.133.140.70.nip.io) · [**Play Red vs Blue**](https://worm.43.133.140.70.nip.io/play) · [**Why WORM**](https://worm.43.133.140.70.nip.io/essay) · [**Status**](docs/STATUS.md) · [**Limits**](LIMITATIONS.md)
+[**The dish**](https://wormsim.xyz) · [**Play Red vs Blue**](https://wormsim.xyz/play) · [**Why WORM**](https://wormsim.xyz/essay) · [**Status**](docs/STATUS.md) · [**Limits**](LIMITATIONS.md)
 
 </div>
 
@@ -47,8 +47,8 @@ Every claim below is checkable, and most are checkable in one line.
 | The engine has no runtime dependencies | `sim/engine.ts` imports `sim/hash.ts` and nothing else |
 | Nothing tracked can silently reach the network | `tests/boundary.test.ts` walks every tracked file and fails if a network, subprocess or environment capability appears outside a twelve-file allowlist, each entry with its reason in the diff |
 | SHA-256 is really SHA-256 | `tests/sim.test.ts` cross-checks `sim/hash.ts` against `node:crypto` |
-| The deployed site serves the same bytes as this repository | `curl 'https://worm.43.133.140.70.nip.io/api/run?seed=20261013&ticks=340'` and compare `chain` with [`tests/goldens.json`](tests/goldens.json) |
-| The live season's randomness came from a real block | `curl https://worm.43.133.140.70.nip.io/api/live` — day 1's draw is Robinhood Chain block `87709117` |
+| The deployed site serves the same bytes as this repository | `curl 'https://wormsim.xyz/api/run?seed=20261013&ticks=340'` and compare `chain` with [`tests/goldens.json`](tests/goldens.json) |
+| The live season's randomness came from a real block | `curl https://wormsim.xyz/api/live` — day 1's draw is Robinhood Chain block `87709117` |
 
 The pinned commitment for seed `20261013` over 340 ticks:
 
@@ -100,10 +100,10 @@ uses, so what a player sees is what the engine produced.
 
 | Surface | What it does |
 | --- | --- |
-| [`/`](https://worm.43.133.140.70.nip.io) | The dish, drawn live from the engine, with a scrubber over all 340 ticks |
-| [`/play`](https://worm.43.133.140.70.nip.io/play) | **Outbreak** — a real-time roguelite on the paper: 7 days plus a boss and an endless mode, a 32-card draft, 12 badges, and every run re-runs to the same score. Plus the live season, and a practice season against 40 bots |
-| [`/worm/[id]`](https://worm.43.133.140.70.nip.io/worm/30) | One page per agent: its balance over its life, its family, and a diary where each line carries the hash of the tick it came from |
-| [`/forecast`](https://worm.43.133.140.70.nip.io/forecast) | 1,560 simulated weeks (5 defences × 13 capability years × 24 dishes), regenerated bit for bit |
+| [`/`](https://wormsim.xyz) | The dish, drawn live from the engine, with a scrubber over all 340 ticks |
+| [`/play`](https://wormsim.xyz/play) | **Outbreak** — a real-time roguelite on the paper: 7 days plus a boss and an endless mode, a 32-card draft, 12 badges, and every run re-runs to the same score. Plus the live season, and a practice season against 40 bots |
+| [`/worm/[id]`](https://wormsim.xyz/worm/30) | One page per agent: its balance over its life, its family, and a diary where each line carries the hash of the tick it came from |
+| [`/forecast`](https://wormsim.xyz/forecast) | 1,560 simulated weeks (5 defences × 13 capability years × 24 dishes), regenerated bit for bit |
 | `/player/[address]` | A wallet's season: side, daily results, badges — ranked in the browser from the replay |
 | `/api/run` · `/api/live` · `/api/runs` | The engine's commitment, the live clock and seal, and the daily board with a Merkle proof per entry |
 
