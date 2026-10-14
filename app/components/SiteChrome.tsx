@@ -24,6 +24,7 @@ export function SiteNav({ home = false }: { home?: boolean }) {
       <Link href="/essay">Why WORM</Link>
       <Link href="/faq">FAQ</Link>
       <Link href="/docs">Docs</Link>
+      <a href="https://github.com/wormsim/worm" target="_blank" rel="noreferrer">GitHub</a>
     </div>
     <Link className="navCta" href="/play">PLAY OUTBREAK <span>→</span></Link>
   </nav>;
@@ -46,6 +47,7 @@ export function SiteFooter() {
         <Link href="/governance">Governance</Link>
         <Link href="/terms">Terms</Link>
         <Link href="/privacy">Privacy</Link>
+        <a href="https://github.com/wormsim/worm" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </div>
     <p>Simulation only. No real money moves and nothing leaves the dish. Wallets only sign sealed moves; the chain only supplies randomness and daily anchors. {TOKEN.live ? `${TOKEN.symbol} is not a share of anything; the only contract address is the one in the token section.` : "No token exists yet."}</p>
