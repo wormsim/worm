@@ -177,6 +177,10 @@ Cron runs on UTC: a keep-alive on `/api/live` every five minutes, `post:daily` a
 anchor commands at 00:05. The anchors and the post run in **dry-run** mode until someone adds
 `--send` and `--post`, because writing a commitment or posting to X should be a deliberate act.
 
+The server side is written down in [`deploy/README.md`](deploy/README.md): releases and the symlink
+they switch, the systemd timers (a daily backup of the record, a five-minute health check, the
+certificate), and the two things it does not cover — one host, and no alerting.
+
 ## What does not exist
 
 Stated so that nobody has to infer it. [docs/STATUS.md](docs/STATUS.md) is the single source of

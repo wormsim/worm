@@ -3,7 +3,7 @@
    A topic names a file in the repository; the page shows that file, verbatim.
    --------------------------------------------------------------------------- */
 
-export type Group = "Start here" | "The games" | "Records";
+export type Group = "Start here" | "The games" | "Reference" | "Records";
 
 export interface Topic {
   slug: string;
@@ -14,7 +14,7 @@ export interface Topic {
   blurb: string;
 }
 
-export const GROUPS: Group[] = ["Start here", "The games", "Records"];
+export const GROUPS: Group[] = ["Start here", "The games", "Reference", "Records"];
 
 export const TOPICS: Topic[] = [
   { slug: "status", group: "Start here", title: "Status", file: "docs/STATUS.md",
@@ -31,6 +31,10 @@ export const TOPICS: Topic[] = [
     blurb: "The roguelite: seven days, a card a day, and a score that is the replay's score." },
   { slug: "for-modifiers", group: "The games", title: "For modifiers", file: "docs/FOR-MODIFIERS.md",
     blurb: "The rules for changing any of this without quietly breaking the one thing it promises." },
+  { slug: "glossary", group: "Reference", title: "Glossary", file: "docs/glossary.md",
+    blurb: "Every word this project uses, defined once: tick, lid, seal, draw, R, anchor." },
+  { slug: "deploy", group: "Reference", title: "Deploy and ops", file: "deploy/README.md",
+    blurb: "How this runs on a server: releases, the timers, the UTC cron, the backups, and what is not covered." },
   { slug: "article", group: "Records", title: "The source reading", file: "docs/ARTICLE.md",
     blurb: "The research this draws its premise from, with its numbers cited and the things it does not claim." },
   { slug: "audit-log", group: "Records", title: "Audit log", file: "AUDIT-LOG.md",

@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of truth for launch facts. Pages and docs read from here instead of hard-coding a chain, a venue, an address or a status. Values still written as {{PLACEHOLDER}} are not decided: the site renders them as 'to be announced' (app/lib/launch.ts) and never prints the placeholder. When a value is final, replace it here, rebuild, and the whole site follows.",
-  "site": "{{SITE_URL}}",
+  "site": "https://worm.43.133.140.70.nip.io",
   "token": {
     "symbol": "$WORM",
     "name": "WORM",

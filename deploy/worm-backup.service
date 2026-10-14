@@ -1,0 +1,7 @@
+[Unit]
+Description=WORM: back up the season ledger, the board and the anchor manifest
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/srv/worm/current/deploy/backup.sh

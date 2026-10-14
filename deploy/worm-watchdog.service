@@ -1,0 +1,7 @@
+[Unit]
+Description=WORM: check that the live season still answers, restart it if it does not
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/srv/worm/current/deploy/watchdog.sh

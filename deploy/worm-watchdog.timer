@@ -1,0 +1,11 @@
+[Unit]
+Description=Check the WORM live season every five minutes
+
+[Timer]
+OnBootSec=5min
+OnCalendar=*:0/5
+Persistent=true
+RandomizedDelaySec=30s
+
+[Install]
+WantedBy=timers.target

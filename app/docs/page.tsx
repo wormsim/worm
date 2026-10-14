@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 /* The index is Markdown rendered by the same component the documents use, and it is
    built from `topics.ts`, so a page cannot be listed here without existing there. */
 const index = [
-  "Nine pages, each one a view of a file in the repository rather than a second copy of it. If a",
+  `${TOPICS.length} pages, each one a view of a file in the repository rather than a second copy of it. If a`,
   "page and its file ever disagree, the file is right.",
   "",
   ...GROUPS.flatMap((group) => [

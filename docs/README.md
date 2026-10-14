@@ -26,6 +26,13 @@ Both live on `/play`, and both replay: a run's score is the replay's score, not 
 | [`OUTBREAK.md`](OUTBREAK.md) | The roguelite: the seven days, the draft, the cards, the scoring, the badges |
 | [`FOR-MODIFIERS.md`](FOR-MODIFIERS.md) | The rules for changing any of this without breaking the promise |
 
+## Reference
+
+| Doc | Read it for |
+| --- | --- |
+| [`glossary.md`](glossary.md) | Every word the project uses, defined once: tick, lid, seal, draw, R, anchor |
+| [`../deploy/README.md`](../deploy/README.md) | How it runs on a server: releases, timers, UTC cron, backups, and what is not covered |
+
 ## Written, tested, and deliberately unused
 
 The code exists and is tested; nothing here has been switched on, and the site says so.
