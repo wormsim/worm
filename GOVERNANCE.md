@@ -13,8 +13,8 @@ token.
 | Thing | Holder | Notes |
 | --- | --- | --- |
 | Repository and source | The maintainer | History is the record |
-| Deployment access | None yet | There is no hosted service |
-| Wallets | **None** | There is no wallet, no key, and no address to publish |
+| Deployment access | The maintainer | One server, one process; the site is deployed and this repository is public |
+| Wallets | **None of the project's** | Players sign with their own wallets; the project holds no key, and the anchor wallet is not funded |
 | Token allocation | **None**, because no token exists | If one ever exists, its allocation and its chain are published before anything opens |
 
 No key material is in this repository, and none is needed to run it.

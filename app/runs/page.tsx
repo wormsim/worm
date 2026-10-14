@@ -41,7 +41,7 @@ export default function Runs() {
           </tbody>
         </table>
       </div>
-      <p className="docNote">{goldens.length} pinned run{goldens.length === 1 ? "" : "s"} · {live[0]?.note ?? ""}. Nothing here is anchored on a chain yet; that is listed as not built in <Link href="/limitations">Limitations</Link>.</p>
+      <p className="docNote">{goldens.length} pinned run{goldens.length === 1 ? "" : "s"} · {live[0]?.note ?? ""}. Nothing here is anchored on a chain yet: the writer is built and tested, and stays unused until an anchor wallet is funded — see <Link href="/limitations">Limitations</Link>.</p>
     </section>
     <SiteFooter />
   </main>;

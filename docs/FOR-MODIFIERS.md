@@ -6,14 +6,15 @@ change that quietly breaks the only thing this project promises.
 ## What this project is
 
 A deterministic simulation: agents with balances pay rent, may earn, may split into a parent and a
-child, and die at zero. There is **no wallet, no chain, no payment, no token**. That absence is the
+child, and die at zero. There is **no payment rail, no custody and no token**: a wallet only signs a
+message that seals a move, and the chain supplies randomness and a public record. That absence is the
 product, not a backlog item — see [`STATUS.md`](STATUS.md).
 
 ## Run these three commands before you say you are done
 
 ```bash
 npm ci
-npm test                                                  # 12 tests: determinism, invariants, hashes, boundary
+npm test                                                  # 56 tests: determinism, invariants, hashes, boundary
 npm run replay -- --seed 20261013 --ticks 340 --check      # → IDENTICAL
 ```
 

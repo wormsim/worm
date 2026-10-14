@@ -280,7 +280,7 @@ npm run replay -- --seed ${GOLDEN_SEED} --ticks ${GOLDEN_TICKS} --check
       <ul className="notBuilt">{notBuilt.map((l) => <li key={l.slice(0, 24)}><i>✕</i>{l.split(". ")[0].replace(/\.$/, "")}.</li>)}</ul>
       <ol className="road">
         <li className="done"><span className="mono">NOW</span><b>The simulation, verifiable</b><p>This repository: the engine, the chain, the goldens and the tests.</p></li>
-        <li><span className="mono">NEXT · DESIGNED, NOT BUILT</span><b>A daily commitment</b><p>Each closed day&apos;s chain head written publicly as a memo, with a verifier that recomputes it.</p></li>
+        <li><span className="mono">NEXT · BUILT, NOT YET USED</span><b>A daily commitment</b><p>The writer and its verifier exist and are tested; each closed day&apos;s chain head goes on chain as a memo once an anchor wallet is funded.</p></li>
         <li><span className="mono">ONLY IF JUSTIFIED</span><b>Real balance rails</b><p>Brings identity, custody and anti-money-laundering duties. A decision, not a next task.</p></li>
       </ol>
     </section>

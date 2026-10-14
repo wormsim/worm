@@ -18,10 +18,11 @@ cannot be trusted about anything else.
 
 ## The boundary
 
-- **No money moves.** No wallet, no chain, no payment rail, no custody. Nothing here can take or send
-  anything.
-- **Nothing replicates.** No network access, no scanning, no code copied between machines, no weights
-  duplicated. "Split" is an array append and a halved number.
+- **No money moves.** No payment rail, no custody. A wallet signs a message that seals a move and
+  nothing else, and the chain supplies randomness and a public record — not a balance. Nothing here
+  can take or send anything.
+- **Nothing replicates.** No scanning, no code copied between machines, no weights duplicated, and no
+  part of the engine can reach a network. "Split" is an array append and a halved number.
 - **An agent cannot act.** It has no tools, no key and no way to influence anything outside the tick.
   This is a deliberate inversion of the risk the source research describes.
 - **No prompt, model or inference is involved.** The agents are arithmetic, not language models.
@@ -29,23 +30,29 @@ cannot be trusted about anything else.
 
 ## Known weaknesses
 
-- **The demo on the pitch page is a second implementation** of the same idea in browser JavaScript.
-  Two implementations of one rule set is a drift risk; the engine is the source of truth, and the
-  page's toy is labelled as a toy.
+- **The live season rests on one process on one machine.** No cluster, no failover, and the day's
+  ledger is a file on that machine's disk. A dead host is a dead season until it is restored.
 - **The safety argument is structural *and* enforced — but only against the obvious.** Every tracked
-  source file is scanned on every push for networking, subprocess and environment access, and the
-  allowlist of exceptions is empty (`tests/boundary.test.ts`). That catches a `fetch` or a
-  `child_process`; it cannot catch an obfuscated one, and it says nothing about what a future
-  dependency might do. A dependency-free engine is the second half of that defence, and it is
-  asserted too: `sim/engine.ts` imports nothing but its own hash module.
-- **No anchoring, no external timestamp, no third party has replayed a run.** Until something outside
-  this repository witnesses the output, the guarantee is "the code and the author agree".
+  source file is scanned on every push for networking, subprocess and environment access. Twelve files
+  are allowlisted today — the anchor writers and their memo helper, the daily poster, the live
+  season's chain, store and drand client, the board's files, and the three browser clients that call
+  this site's own API — each with its reason written beside it in `tests/boundary.test.ts`, so an
+  addition is visible in the diff instead of silent. That catches a `fetch` or a `child_process`; it
+  cannot catch an obfuscated one, and it says nothing about what a future dependency might do. A
+  dependency-free engine is the second half of that defence, and it is asserted too: `sim/engine.ts`
+  imports nothing but its own hash module.
+- **Nothing is anchored yet, and no third party has replayed a run.** The writer and its verifier are
+  built and tested, but no anchor wallet has been funded, so the on-chain list is empty. Until
+  something outside this repository witnesses the output, the guarantee is "the code and the author
+  agree".
 
 ## What the operator can still do
 
 - Change the rules — every change that moves a golden is visible in the test diff and in the changelog.
-- Choose which seeds are published, and which day's chain head is anchored (once anchoring exists).
-- Stop the process. There is nothing else to stop: no money, no chain, no user data.
+- Choose which seeds are published, and which day's chain head is anchored (the writer exists; it stays
+  unused until an anchor wallet is funded).
+- Stop the process. There is nothing else to stop: no money and no custody. What lives on disk is the
+  season ledger and the day's board.
 
 What the operator cannot do is rewrite a published run without the change being visible in the
-repository history — and once anchoring exists, without the chain disagreeing.
+repository history — and once the anchors are written, without the chain disagreeing.

@@ -43,13 +43,13 @@ with a value pinned in the tests.
 - No real money, even in the "simulated wallet" sense of a ledger that later becomes real. The
   balances are numbers in a struct.
 
-## 5. The daily commitment (designed, not built)
+## 5. The daily commitment (built, not yet used)
 
-Once the simulation is the artefact being shown, each closed day's chain head should be written to a
-public chain as a memo — one transaction a day, signed by a dedicated wallet whose address is
-published, with a verifier that recomputes the day locally and compares it with the memo. The shape
-is known and small; it is listed as **not built** in [`STATUS.md`](STATUS.md) because no wallet
-exists and no chain has been chosen.
+Each closed day's chain head is written to Robinhood Chain as a memo — one transaction a day, signed
+by a dedicated wallet whose address is published, with a verifier that recomputes the day locally and
+compares it with the memo. The writer is `scripts/anchor.ts` and the verifier is
+`scripts/verify-anchor.ts`; both are listed as **built, not yet used** in [`STATUS.md`](STATUS.md)
+because no anchor wallet has been funded, so the public list is still empty.
 
 ## 6. Order of work
 
