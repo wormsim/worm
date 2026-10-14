@@ -22,6 +22,7 @@ export function SiteNav({ home = false }: { home?: boolean }) {
       <Link href="/forecast">Forecast</Link>
       <Link href="/essay">Why WORM</Link>
       <Link href="/faq">FAQ</Link>
+      <Link href="/docs">Docs</Link>
     </div>
     <Link className="navCta" href="/play">PLAY OUTBREAK <span>→</span></Link>
   </nav>;
@@ -38,6 +39,7 @@ export function SiteFooter() {
         <Link href="/faq">FAQ</Link>
         <Link href="/runs">Pinned runs</Link>
         <Link href="/anchors">Anchors</Link>
+        <Link href="/docs">Docs</Link>
         <Link href="/worm/30">A worm&apos;s page</Link>
         <Link href="/limitations">Limitations</Link>
         <Link href="/governance">Governance</Link>
